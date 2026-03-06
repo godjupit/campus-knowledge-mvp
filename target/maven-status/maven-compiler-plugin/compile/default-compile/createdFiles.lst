@@ -1,0 +1,13 @@
+com\campus\common\result\ApiResponse.class
+com\campus\auth\interceptor\JwtAuthInterceptor.class
+com\campus\auth\entity\User.class
+com\campus\auth\dto\LoginRequest.class
+com\campus\auth\service\UserService.class
+com\campus\CampusKnowledgeMvpApplication.class
+com\campus\auth\controller\UserController.class
+com\campus\auth\mapper\UserMapper.class
+com\campus\auth\dto\UserInfoResponse.class
+com\campus\auth\service\AuthService.class
+com\campus\auth\dto\LoginResponse.class
+com\campus\auth\dto\RegisterRequest.class
+com\campus\auth\controller\AuthController.class
