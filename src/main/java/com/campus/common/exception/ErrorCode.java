@@ -4,7 +4,8 @@ public enum ErrorCode {
     USERNAME_EXISTS(10001, "用户名已存在", 409),
     EMAIL_EXISTS(10002, "邮箱已存在", 409),
     PARAM_INVALID(10003, "参数错误", 400),
-    SYSTEM_ERROR(99999, "系统异常", 500);
+    SYSTEM_ERROR(99999, "系统异常", 500),
+    LOGIN_FAILED(10004, "密码错误", 401);
 
     private final int code;
     private final String message;

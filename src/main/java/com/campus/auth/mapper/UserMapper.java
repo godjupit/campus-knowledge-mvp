@@ -14,4 +14,7 @@ public interface UserMapper {
 
     // TODO: 写入新用户
     void insert(User user);
+
+    // TODO: 根据用户ID查询用户
+    User findById(Long id);
 }

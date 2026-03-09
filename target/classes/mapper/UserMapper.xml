@@ -15,4 +15,7 @@
     <select id="findByEmail" resultType="com.campus.auth.entity.User">
         select * from users where email = #{email};
     </select>
+    <select id="findById" resultType="com.campus.auth.entity.User">
+        select * from users where id = #{id};
+    </select>
 </mapper>

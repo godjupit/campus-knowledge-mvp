@@ -6,6 +6,7 @@
 
 - 第一模块（用户系统）专用教程：`docs/module-1-user-system-tutorial.md`
 - 第一模块（登录功能）技术详解：`docs/module-1-login-technical-guide.md`
+- 第一模块（当前用户接口）技术详解：`docs/module-1-current-user-guide.md`
 
 ## 1. 项目结构
 
