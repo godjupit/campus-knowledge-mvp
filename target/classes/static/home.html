@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园知识社区 - 首页</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-page="home">
+  <header class="topbar">
+    <div class="topbar-inner wrap">
+      <a class="brand" href="/home.html">
+        <span class="brand-mark"></span>
+        <span class="brand-text">CampusHub</span>
+      </a>
+      <nav class="main-nav">
+        <a data-nav="home" href="/home.html">推荐</a>
+        <a href="#">热榜</a>
+        <a href="#">专栏</a>
+        <a href="#">活动</a>
+      </nav>
+      <div class="search">
+        <input id="searchInput" placeholder="搜索话题、课程、经验分享">
+      </div>
+      <div class="actions">
+        <button class="btn ghost">写回答</button>
+        <a class="avatar" href="/profile.html">U</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap grid-home">
+    <section class="left-col">
+      <div class="compose card">
+        <div class="compose-head">
+          <span class="avatar tiny">U</span>
+          <input placeholder="分享你的学习心得、实习经验或课程笔记...">
+          <button class="btn primary">发布</button>
+        </div>
+        <div class="compose-tools">
+          <span>提问题</span>
+          <span>写文章</span>
+          <span>发视频</span>
+          <span>发资源</span>
+        </div>
+      </div>
+
+      <div id="feed" class="feed"></div>
+    </section>
+
+    <aside class="right-col">
+      <div class="card side-card">
+        <h3>创作中心</h3>
+        <div class="stats">
+          <div><strong>40</strong><span>今日阅读</span></div>
+          <div><strong>0</strong><span>新增粉丝</span></div>
+        </div>
+        <button class="btn block">进入创作中心</button>
+      </div>
+
+      <div class="card side-card">
+        <div class="side-title-row">
+          <h3>大家都在搜</h3>
+          <button id="shuffleHot" class="link-btn">换一换</button>
+        </div>
+        <ul id="hotList" class="hot-list"></ul>
+      </div>
+
+      <div class="card side-card">
+        <h3>快捷入口</h3>
+        <ul class="quick-list">
+          <li><a href="/profile.html">个人中心</a></li>
+          <li><a href="/detail.html?id=1">热门文章示例</a></li>
+          <li><a href="#">我的收藏（预留）</a></li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/home.js"></script>
+</body>
+</html>
