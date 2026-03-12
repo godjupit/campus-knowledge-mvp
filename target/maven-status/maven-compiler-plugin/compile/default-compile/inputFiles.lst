@@ -28,7 +28,9 @@ D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\controlle
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\dto\CreatePostRequest.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\dto\PostDetailResponse.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\dto\PostSummaryResponse.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\entity\Post.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\mapper\PostMapper.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\service\impl\PostServiceImpl.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\service\PostService.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\optimize\controller\OptimizeController.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\optimize\service\OptimizeService.java

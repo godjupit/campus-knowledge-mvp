@@ -3,8 +3,11 @@ package com.campus.knowledge.service;
 import com.campus.knowledge.dto.CreatePostRequest;
 import com.campus.knowledge.dto.PostDetailResponse;
 import com.campus.knowledge.dto.PostSummaryResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+
 
 public interface PostService {
 
