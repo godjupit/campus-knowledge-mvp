@@ -13,7 +13,7 @@ public interface PostService {
 
     // TODO: 实现帖子分页查询
 
-    List<PostSummaryResponse> list(Integer page, Integer size);
+    List<PostDetailResponse> list(Integer page, Integer size);
 
     // TODO: 实现帖子详情查询
 

@@ -37,14 +37,15 @@ public class PostController {
     }
 
     @GetMapping
-    public ApiResponse<List<PostSummaryResponse>> list(
+    public ApiResponse<List<PostDetailResponse>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
-        return ApiResponse.ok(List.of(new PostSummaryResponse(1L, "示例帖子", "springboot,mybatis")));
+
+        return ApiResponse.ok(postService.list(page, size));
     }
 
     @GetMapping("/{id}")
     public ApiResponse<PostDetailResponse> detail(@PathVariable Long id) {
-        return ApiResponse.ok(new PostDetailResponse(id, "示例标题", "示例内容", "springboot"));
+        return ApiResponse.ok(postService.detail(id));
     }
 }

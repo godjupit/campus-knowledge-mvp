@@ -8,4 +8,12 @@
     <insert id="insertPost">
         insert into posts(title, content, user_id, tags) values(#{title}, #{content}, #{userId}, #{tags});
     </insert>
+
+    <select id="selectPosts" resultType="com.campus.knowledge.dto.PostDetailResponse">
+        select id, title, content,tags from posts
+        limit #{offset}, #{limit};
+    </select>
+    <select id="postDetail" resultType="com.campus.knowledge.dto.PostDetailResponse">
+        select id, title, content,tags from posts where id = #{id};
+    </select>
 </mapper>

@@ -20,13 +20,16 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public List<PostSummaryResponse> list(Integer page, Integer size) {
-        return List.of();
+    public List<PostDetailResponse> list(Integer page, Integer size) {
+        int offset = (page - 1) * size;
+
+        return postMapper.selectPosts(offset, size);
     }
 
     @Override
     public PostDetailResponse detail(Long id) {
-        return null;
+        
+        return postMapper.postDetail(id);
     }
 
     @Override
