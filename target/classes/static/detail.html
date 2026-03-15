@@ -17,12 +17,18 @@
         <span class="brand-text">CampusHub</span>
       </a>
       <nav class="main-nav">
-        <a href="/home.html">推荐</a>
-        <a href="#">热榜</a>
-        <a href="#">专栏</a>
+        <a href="/home.html">首页</a>
+        <a data-nav="profile" href="/profile.html">个人中心</a>
+        <a href="/auth.html">登录/注册</a>
       </nav>
-      <div class="search small-search"><input placeholder="站内搜索"></div>
-      <div class="actions"><a class="avatar" href="/profile.html">U</a></div>
+      <div class="search small-search">
+        <input placeholder="详情页暂不提供真实搜索">
+      </div>
+      <div class="actions">
+        <a id="authLink" class="btn ghost" href="/auth.html">去登录</a>
+        <button id="logoutBtn" class="btn ghost hidden" type="button">退出登录</button>
+        <a id="avatarLink" class="avatar" href="/profile.html">U</a>
+      </div>
     </div>
   </header>
 
@@ -30,17 +36,17 @@
     <article class="card article" id="article"></article>
     <aside class="right-col">
       <div class="card side-card">
-        <h3>相关推荐（前端模拟）</h3>
+        <h3>最近帖子</h3>
         <ul id="relatedList" class="quick-list"></ul>
       </div>
       <div class="card side-card">
-        <h3>操作区（预留）</h3>
-        <p class="muted">点赞、收藏、评论将在后续模块接入。</p>
+        <h3>互动功能状态</h3>
+        <p class="muted">点赞、收藏、评论接口当前还在你的后端待开发列表中，前端这里先不做伪联调。</p>
+        <p id="detailMessage" class="page-message"></p>
       </div>
     </aside>
   </main>
 
-  <script src="/assets/js/data.js"></script>
   <script src="/assets/js/app.js"></script>
   <script src="/assets/js/detail.js"></script>
 </body>

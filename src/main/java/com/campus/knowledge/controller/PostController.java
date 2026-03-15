@@ -1,6 +1,5 @@
 package com.campus.knowledge.controller;
 
-import com.campus.auth.controller.UserController;
 import com.campus.common.context.UserContext;
 import com.campus.common.exception.BusinessException;
 import com.campus.common.exception.ErrorCode;
@@ -25,11 +24,13 @@ import java.util.List;
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
 public class PostController {
+
     private final PostService postService;
+
     @PostMapping
     public ApiResponse<Void> create(@Valid @RequestBody CreatePostRequest request) {
         Long userId = UserContext.getUserId();
-        if(userId == null){
+        if (userId == null) {
             throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
         postService.create(request);
@@ -37,10 +38,9 @@ public class PostController {
     }
 
     @GetMapping
-    public ApiResponse<List<PostDetailResponse>> list(
+    public ApiResponse<List<PostSummaryResponse>> list(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
-
         return ApiResponse.ok(postService.list(page, size));
     }
 

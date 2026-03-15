@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录与注册 - CampusHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-page="auth">
+  <main class="auth-shell">
+    <section class="auth-hero">
+      <a class="brand" href="/home.html">
+        <span class="brand-mark"></span>
+        <span class="brand-text">CampusHub</span>
+      </a>
+      <h1>先登录，再继续联调后端</h1>
+      <p class="muted">
+        当前前端只接入你已经完成的后端接口：注册、登录、当前用户、帖子发布、帖子列表和帖子详情。
+      </p>
+      <ul class="auth-tip-list">
+        <li>登录成功后会保存 JWT，后续页面请求自动携带 Authorization。</li>
+        <li>如果你调整了后端接口结构，前端可以再跟着你的进度继续收口。</li>
+        <li>搜索、点赞、收藏、评论当前仍保留为后续练习目标。</li>
+      </ul>
+    </section>
+
+    <section class="card auth-card">
+      <div class="auth-tabs">
+        <button id="showLoginBtn" class="auth-tab active" type="button">登录</button>
+        <button id="showRegisterBtn" class="auth-tab" type="button">注册</button>
+      </div>
+
+      <form id="loginForm" class="auth-form">
+        <label class="field">
+          <span>账号</span>
+          <input id="loginAccount" type="text" placeholder="用户名或邮箱" required>
+        </label>
+        <label class="field">
+          <span>密码</span>
+          <input id="loginPassword" type="password" placeholder="请输入密码" required>
+        </label>
+        <button class="btn primary block" type="submit">登录</button>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden">
+        <label class="field">
+          <span>用户名</span>
+          <input id="registerUsername" type="text" placeholder="请输入用户名" required>
+        </label>
+        <label class="field">
+          <span>邮箱</span>
+          <input id="registerEmail" type="email" placeholder="请输入邮箱" required>
+        </label>
+        <label class="field">
+          <span>密码</span>
+          <input id="registerPassword" type="password" placeholder="请输入密码" required>
+        </label>
+        <label class="field">
+          <span>确认密码</span>
+          <input id="registerConfirmPassword" type="password" placeholder="再次输入密码" required>
+        </label>
+        <button class="btn primary block" type="submit">注册</button>
+      </form>
+
+      <p id="authMessage" class="page-message"></p>
+    </section>
+  </main>
+
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/auth.js"></script>
+</body>
+</html>

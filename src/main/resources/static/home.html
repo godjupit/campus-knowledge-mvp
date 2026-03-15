@@ -17,17 +17,17 @@
         <span class="brand-text">CampusHub</span>
       </a>
       <nav class="main-nav">
-        <a data-nav="home" href="/home.html">推荐</a>
-        <a href="#">热榜</a>
-        <a href="#">专栏</a>
-        <a href="#">活动</a>
+        <a data-nav="home" href="/home.html">首页</a>
+        <a data-nav="profile" href="/profile.html">个人中心</a>
+        <a href="/auth.html">登录/注册</a>
       </nav>
       <div class="search">
-        <input id="searchInput" placeholder="搜索话题、课程、经验分享">
+        <input id="searchInput" placeholder="按标题、内容、标签做前端过滤">
       </div>
       <div class="actions">
-        <button class="btn ghost">写回答</button>
-        <a class="avatar" href="/profile.html">U</a>
+        <a id="authLink" class="btn ghost" href="/auth.html">去登录</a>
+        <button id="logoutBtn" class="btn ghost hidden" type="button">退出登录</button>
+        <a id="avatarLink" class="avatar" href="/profile.html">U</a>
       </div>
     </div>
   </header>
@@ -36,16 +36,19 @@
     <section class="left-col">
       <div class="compose card">
         <div class="compose-head">
-          <span class="avatar tiny">U</span>
-          <input placeholder="分享你的学习心得、实习经验或课程笔记...">
-          <button class="btn primary">发布</button>
+          <span id="composeAvatar" class="avatar tiny">U</span>
+          <input id="postTitleInput" placeholder="标题：例如 Spring Boot 登录功能踩坑记录">
+          <button id="publishBtn" class="btn primary" type="button">发布帖子</button>
         </div>
+        <textarea id="postContentInput" class="compose-textarea" placeholder="内容：记录你的思路、步骤和踩坑点"></textarea>
+        <input id="postTagsInput" class="compose-tags" placeholder="标签：例如 springboot,java,mybatis">
         <div class="compose-tools">
-          <span>提问题</span>
-          <span>写文章</span>
-          <span>发视频</span>
-          <span>发资源</span>
+          <span>当前已接通：发布帖子</span>
+          <span>待你后端完成：评论</span>
+          <span>待你后端完成：点赞</span>
+          <span>待你后端完成：收藏</span>
         </div>
+        <p id="publishMessage" class="page-message"></p>
       </div>
 
       <div id="feed" class="feed"></div>
@@ -53,34 +56,34 @@
 
     <aside class="right-col">
       <div class="card side-card">
-        <h3>创作中心</h3>
+        <h3>当前后端进度</h3>
         <div class="stats">
-          <div><strong>40</strong><span>今日阅读</span></div>
-          <div><strong>0</strong><span>新增粉丝</span></div>
+          <div><strong>6</strong><span>已接通接口</span></div>
+          <div><strong>3</strong><span>已完成主线模块</span></div>
         </div>
-        <button class="btn block">进入创作中心</button>
+        <p class="muted side-note">当前前端只依赖注册、登录、当前用户、发帖、列表、详情接口。</p>
       </div>
 
       <div class="card side-card">
         <div class="side-title-row">
-          <h3>大家都在搜</h3>
-          <button id="shuffleHot" class="link-btn">换一换</button>
+          <h3>当前登录状态</h3>
         </div>
-        <ul id="hotList" class="hot-list"></ul>
+        <div id="currentUserCard" class="status-panel">
+          <p class="muted">未登录时无法访问当前后端接口。</p>
+        </div>
       </div>
 
       <div class="card side-card">
-        <h3>快捷入口</h3>
+        <h3>练习提示</h3>
         <ul class="quick-list">
-          <li><a href="/profile.html">个人中心</a></li>
-          <li><a href="/detail.html?id=1">热门文章示例</a></li>
-          <li><a href="#">我的收藏（预留）</a></li>
+          <li><a href="/profile.html">查看当前用户接口效果</a></li>
+          <li><a href="/docs/backend-practice-roadmap.md">按文档推进后端练习</a></li>
+          <li><span>搜索、热门、推荐暂不接前端真实请求</span></li>
         </ul>
       </div>
     </aside>
   </main>
 
-  <script src="/assets/js/data.js"></script>
   <script src="/assets/js/app.js"></script>
   <script src="/assets/js/home.js"></script>
 </body>

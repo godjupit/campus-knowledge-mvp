@@ -1,24 +1,65 @@
-const articleEl = document.getElementById("article");
-const relatedListEl = document.getElementById("relatedList");
+(function initDetailPage() {
+  const app = window.CampusApp;
+  const articleEl = document.getElementById("article");
+  const relatedListEl = document.getElementById("relatedList");
 
-function getId() {
-  const p = new URLSearchParams(window.location.search);
-  return Number(p.get("id") || 1);
-}
+  if (!app || !articleEl) {
+    return;
+  }
 
-function renderArticle() {
-  const id = getId();
-  const post = window.MockData.posts.find((p) => p.id === id) || window.MockData.posts[0];
+  if (!app.requireLogin()) {
+    return;
+  }
 
-  articleEl.innerHTML = `
-    <h1>${post.title}</h1>
-    <p class="muted">作者：${post.author} · 标签：${post.tag}</p>
-    <hr style="border:none;border-top:1px solid var(--line);margin:14px 0;">
-    <p style="line-height:1.8">${post.content}</p>
-  `;
+  function getId() {
+    const params = new URLSearchParams(window.location.search);
+    return Number(params.get("id"));
+  }
 
-  const related = window.MockData.posts.filter((p) => p.id !== post.id);
-  relatedListEl.innerHTML = related.map((p) => `<li><a href="/detail.html?id=${p.id}">${p.title}</a></li>`).join("");
-}
+  function renderArticle(post) {
+    articleEl.innerHTML = `
+      <h1>${post.title || "未命名帖子"}</h1>
+      <p class="muted">帖子 ID：${post.id} · 标签：${post.tags || "未分类"}</p>
+      <hr class="article-divider">
+      <p class="article-content">${post.content || "暂无内容"}</p>
+    `;
+  }
 
-renderArticle();
+  function renderRelated(list, currentId) {
+    const filtered = list.filter((item) => item.id !== currentId).slice(0, 5);
+    if (!filtered.length) {
+      relatedListEl.innerHTML = "<li>暂无其他帖子</li>";
+      return;
+    }
+    relatedListEl.innerHTML = filtered.map((item) => `
+      <li><a href="/detail.html?id=${item.id}">${item.title || "未命名帖子"}</a></li>
+    `).join("");
+  }
+
+  async function init() {
+    const user = await app.fetchCurrentUser();
+    if (!user) {
+      app.clearToken();
+      window.location.href = "/auth.html";
+      return;
+    }
+    app.updateSessionUi(user);
+
+    const id = getId();
+    if (!id) {
+      articleEl.innerHTML = '<div class="empty-state">缺少帖子 ID，请从首页进入详情页。</div>';
+      return;
+    }
+
+    try {
+      const post = await app.request(`/api/posts/${id}`);
+      renderArticle(post);
+      const posts = await app.request("/api/posts?page=1&size=10");
+      renderRelated(posts, post.id);
+    } catch (error) {
+      articleEl.innerHTML = `<div class="empty-state">${error.message}</div>`;
+    }
+  }
+
+  init();
+})();

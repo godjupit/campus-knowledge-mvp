@@ -6,14 +6,29 @@
 <mapper namespace="com.campus.knowledge.mapper.PostMapper">
 
     <insert id="insertPost">
-        insert into posts(title, content, user_id, tags) values(#{title}, #{content}, #{userId}, #{tags});
+        insert into posts (title, content, user_id, tags, status)
+        values (#{title}, #{content}, #{userId}, #{tags}, 1)
     </insert>
 
-    <select id="selectPosts" resultType="com.campus.knowledge.dto.PostDetailResponse">
-        select id, title, content,tags from posts
-        limit #{offset}, #{limit};
+    <select id="selectPosts" resultType="com.campus.knowledge.dto.PostSummaryResponse">
+        select id, title, content, tags
+        from posts
+        where status = 1
+        order by created_at desc
+        limit #{limit} offset #{offset}
     </select>
+
     <select id="postDetail" resultType="com.campus.knowledge.dto.PostDetailResponse">
-        select id, title, content,tags from posts where id = #{id};
+        select id,
+               title,
+               content,
+               tags,
+               view_count,
+               like_count,
+               favorite_count,
+               comment_count
+        from posts
+        where id = #{id}
+          and status = 1
     </select>
 </mapper>

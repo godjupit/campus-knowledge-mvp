@@ -17,34 +17,39 @@
         <span class="brand-text">CampusHub</span>
       </a>
       <nav class="main-nav">
-        <a href="/home.html">推荐</a>
+        <a href="/home.html">首页</a>
         <a data-nav="profile" href="/profile.html">个人中心</a>
+        <a href="/auth.html">登录/注册</a>
       </nav>
-      <div class="actions"><a class="avatar" href="/profile.html">U</a></div>
+      <div class="actions">
+        <a id="authLink" class="btn ghost" href="/auth.html">去登录</a>
+        <button id="logoutBtn" class="btn ghost hidden" type="button">退出登录</button>
+        <a id="avatarLink" class="avatar" href="/profile.html">U</a>
+      </div>
     </div>
   </header>
 
   <main class="wrap grid-profile">
     <section class="card profile-head">
-      <div class="avatar xl">U</div>
+      <div id="profileAvatar" class="avatar xl">U</div>
       <div>
-        <h1 id="userName">校园创作者</h1>
-        <p id="userBio" class="muted">计算机专业 | 乐于分享课程与项目经验</p>
+        <h1 id="userName">未登录</h1>
+        <p id="userBio" class="muted">登录后可以查看当前用户接口返回的数据。</p>
         <div class="profile-stats">
-          <div><strong>12</strong><span>我的帖子</span></div>
-          <div><strong>389</strong><span>获赞</span></div>
-          <div><strong>55</strong><span>收藏</span></div>
+          <div><strong id="profileUserId">-</strong><span>用户 ID</span></div>
+          <div><strong id="profileUsername">-</strong><span>用户名</span></div>
+          <div><strong id="profileEmail">-</strong><span>邮箱</span></div>
         </div>
       </div>
     </section>
 
     <section class="card profile-content">
-      <h2>我的发布</h2>
+      <h2>当前阶段说明</h2>
       <div id="myPosts" class="feed"></div>
+      <p id="profileMessage" class="page-message"></p>
     </section>
   </main>
 
-  <script src="/assets/js/data.js"></script>
   <script src="/assets/js/app.js"></script>
   <script src="/assets/js/profile.js"></script>
 </body>
