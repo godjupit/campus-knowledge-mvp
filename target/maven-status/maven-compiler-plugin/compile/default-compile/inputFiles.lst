@@ -37,5 +37,6 @@ D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\service\P
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\optimize\controller\OptimizeController.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\optimize\service\OptimizeService.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\search\controller\SearchController.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\search\service\HotPostsCacheService.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\search\service\impl\SearchServiceImpl.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\search\service\SearchService.java

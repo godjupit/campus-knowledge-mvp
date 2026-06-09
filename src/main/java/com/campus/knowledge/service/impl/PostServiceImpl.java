@@ -9,6 +9,7 @@ import com.campus.knowledge.dto.PostSummaryResponse;
 import com.campus.knowledge.entity.Post;
 import com.campus.knowledge.mapper.PostMapper;
 import com.campus.knowledge.service.PostService;
+import com.campus.search.service.HotPostsCacheService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class PostServiceImpl implements PostService {
     private static final int MAX_SIZE = 50;
 
     private final PostMapper postMapper;
+    private final HotPostsCacheService hotPostsCacheService;
 
     @Override
     public List<PostSummaryResponse> list(Integer page, Integer size) {
@@ -49,5 +51,6 @@ public class PostServiceImpl implements PostService {
         post.setContent(request.getContent());
         post.setTags(request.getTags());
         postMapper.insertPost(post);
+        hotPostsCacheService.evict();
     }
 }

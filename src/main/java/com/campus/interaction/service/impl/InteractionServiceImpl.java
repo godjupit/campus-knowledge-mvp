@@ -7,6 +7,7 @@ import com.campus.interaction.dto.CommentResponse;
 import com.campus.interaction.dto.CreateCommentRequest;
 import com.campus.interaction.mapper.InteractionMapper;
 import com.campus.interaction.service.InteractionService;
+import com.campus.search.service.HotPostsCacheService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InteractionServiceImpl implements InteractionService {
     private final InteractionMapper interactionMapper;
+    private final HotPostsCacheService hotPostsCacheService;
+
     @Override
     @Transactional
     public void comment(CreateCommentRequest request){
@@ -28,7 +31,7 @@ public class InteractionServiceImpl implements InteractionService {
         }
         interactionMapper.insertComment(userId, postId, request.getContent(), request.getParentId());
         interactionMapper.incrementCommentCount(postId);
-
+        hotPostsCacheService.evict();
     }
 
     @Override
@@ -51,7 +54,7 @@ public class InteractionServiceImpl implements InteractionService {
         }
         interactionMapper.insertLikeRecord(userId, postId);
         interactionMapper.incrementLikeCount(postId);
-
+        hotPostsCacheService.evict();
 
     }
 
@@ -67,7 +70,7 @@ public class InteractionServiceImpl implements InteractionService {
         }
         interactionMapper.insertFavoriteRecord(userId, postId);
         interactionMapper.incrementFavoriteCount(postId);
-
+        hotPostsCacheService.evict();
 
     }
 

@@ -10,6 +10,7 @@
   const prevPageBtn = document.getElementById("prevPageBtn");
   const nextPageBtn = document.getElementById("nextPageBtn");
   const pageInfoEl = document.getElementById("pageInfo");
+  const hotPostListEl = document.getElementById("hotPostList");
 
   if (!app || !feedEl) {
     return;
@@ -24,6 +25,7 @@
   const pageSize = 10;
   let hasNextPage = false;
   let isSearchMode = false;
+  let activeKeyword = "";
 
   function escapeHtml(value) {
     return String(value || "")
@@ -41,6 +43,20 @@
     return content.length > 120 ? `${content.slice(0, 120)}...` : content;
   }
 
+  function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function highlightText(value) {
+    const escapedValue = escapeHtml(value);
+    if (!activeKeyword) {
+      return escapedValue;
+    }
+
+    const pattern = new RegExp(escapeRegExp(escapeHtml(activeKeyword)), "gi");
+    return escapedValue.replace(pattern, '<mark class="search-highlight">$&</mark>');
+  }
+
   function renderFeed(list) {
     if (!list.length) {
       feedEl.innerHTML = '<div class="card empty-state">当前没有帖子数据。</div>';
@@ -50,10 +66,10 @@
     feedEl.innerHTML = list.map((item) => `
       <a href="/detail.html?id=${item.id}" class="post card post-link">
         <div>
-          <h3>${escapeHtml(item.title || "未命名帖子")}</h3>
+          <h3>${highlightText(item.title || "\u672a\u547d\u540d\u5e16\u5b50")}</h3>
         </div>
-        <p>${escapeHtml(excerpt(item.content))}</p>
-        <div class="meta">标签：${escapeHtml(item.tags || "未分类")} · ID：${item.id}</div>
+        <p>${highlightText(excerpt(item.content))}</p>
+        <div class="meta">&#26631;&#31614;&#65306;${highlightText(item.tags || "\u672a\u5206\u7c7b")} &middot; ID&#65306;${item.id}</div>
         <div class="card-actions">
           <span class="card-count">点赞 ${item.likeCount || 0}</span>
           <span class="card-count">收藏 ${item.favoriteCount || 0}</span>
@@ -61,6 +77,30 @@
           <button class="btn ghost card-action-btn" type="button" data-action="favorite" data-id="${item.id}">收藏</button>
         </div>
       </a>
+    `).join("");
+  }
+
+  function renderHotPosts(list) {
+    if (!hotPostListEl) {
+      return;
+    }
+
+    if (!list.length) {
+      hotPostListEl.innerHTML = '<li class="empty-state compact">&#26242;&#26080;&#28909;&#38376;&#24086;&#23376;</li>';
+      return;
+    }
+
+    // TODO: Render hot post title, rank and stats.
+    // Tip: each item has id/title/likeCount/favoriteCount.
+    // Tip: after adding commentCount/viewCount to summary DTO, show them here too.
+    hotPostListEl.innerHTML = list.map((item) => `
+      <li class="hot-item">
+        <a href="/detail.html?id=${item.id}">${escapeHtml(item.title || "\u672a\u547d\u540d\u5e16\u5b50")}</a>
+        <div class="hot-meta">
+          &#28857;&#36190; ${item.likeCount || 0} &middot;
+          &#25910;&#34255; ${item.favoriteCount || 0}
+        </div>
+      </li>
     `).join("");
   }
 
@@ -103,6 +143,7 @@
   async function loadPosts(page) {
     try {
       isSearchMode = false;
+      activeKeyword = "";
       currentPage = page || currentPage;
       postData = await app.request(`/api/posts?page=${currentPage}&size=${pageSize}`);
       hasNextPage = postData.length === pageSize;
@@ -110,6 +151,20 @@
       updatePagination();
     } catch (error) {
       feedEl.innerHTML = `<div class="card empty-state">${escapeHtml(error.message)}</div>`;
+    }
+  }
+
+  async function loadHotPosts() {
+    if (!hotPostListEl) {
+      return;
+    }
+
+    try {
+      // TODO: Make sure backend /api/posts/hot returns posts ordered by hot score.
+      const hotPosts = await app.request("/api/posts/hot");
+      renderHotPosts(hotPosts || []);
+    } catch (error) {
+      app.setMessage("#hotPostMessage", error.message, "error");
     }
   }
 
@@ -124,6 +179,7 @@
 
     try {
       isSearchMode = true;
+      activeKeyword = keyword;
       currentPage = 1;
       postData = await app.request(`/api/search?keyword=${encodeURIComponent(keyword)}&page=1&size=${pageSize}`);
       hasNextPage = false;
@@ -168,6 +224,7 @@
       contentInputEl.value = "";
       tagsInputEl.value = "";
       searchInputEl.value = "";
+      activeKeyword = "";
       app.setMessage("#publishMessage", "发布成功，已重新加载帖子列表。", "success");
       await loadPosts(1);
     } catch (error) {
@@ -188,6 +245,7 @@
       return;
     }
     searchInputEl.value = "";
+    activeKeyword = "";
     app.setMessage("#feedMessage", "");
     loadPosts(currentPage - 1);
   });
@@ -196,6 +254,7 @@
       return;
     }
     searchInputEl.value = "";
+    activeKeyword = "";
     app.setMessage("#feedMessage", "");
     loadPosts(currentPage + 1);
   });
@@ -214,5 +273,6 @@
   updatePagination();
   loadCurrentUser().then(function afterUserLoaded() {
     loadPosts(1);
+    loadHotPosts();
   });
 })();

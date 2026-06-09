@@ -219,6 +219,14 @@ a { text-decoration: none; color: inherit; }
 .post p { margin: 0; color: #4b5563; line-height: 1.65; }
 .post .meta { margin-top: 10px; color: var(--muted); font-size: 12px; }
 
+.search-highlight {
+  border-radius: 4px;
+  padding: 0 3px;
+  background: #fff1a6;
+  color: #1f2329;
+  font-weight: 700;
+}
+
 .post-link {
   display: block;
 }
@@ -306,6 +314,43 @@ a { text-decoration: none; color: inherit; }
 .task-row span {
   color: var(--muted);
   font-size: 13px;
+}
+
+.hot-card {
+  min-height: 320px;
+}
+
+.hot-list {
+  margin: 14px 0 0;
+  padding-left: 24px;
+  display: grid;
+  gap: 12px;
+}
+
+.hot-item {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.hot-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hot-item a {
+  display: block;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.hot-item a:hover {
+  color: var(--brand);
+}
+
+.hot-meta {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .stats {

@@ -24,6 +24,7 @@
     </select>
 
     <select id="searchPosts" resultType="com.campus.knowledge.dto.PostSummaryResponse">
+        <bind name="likeKeyword" value="'%' + keyword.toLowerCase() + '%'" />
         select id,
                title,
                content,
@@ -32,9 +33,9 @@
                favorite_count
         from posts
         where status = 1
-          and (title like concat('%', #{keyword}, '%')
-            or content like concat('%', #{keyword}, '%')
-            or tags like concat('%', #{keyword}, '%'))
+          and (lower(coalesce(title, '')) like #{likeKeyword}
+            or lower(coalesce(content, '')) like #{likeKeyword}
+            or lower(coalesce(tags, '')) like #{likeKeyword})
         <!-- TODO: 确认排序规则，默认可以按 created_at desc -->
         order by created_at desc
         limit #{limit} offset #{offset}
@@ -49,8 +50,9 @@
                favorite_count
         from posts
         where status = 1
-        <!-- TODO: 确认热门排序规则，例如 view_count/like_count/favorite_count/comment_count 综合排序 -->
-        order by created_at desc
+        <!-- TODO: Replace this with hot score ordering.
+             Idea: view_count * 1 + like_count * 3 + favorite_count * 5 + comment_count * 4 -->
+        order by view_count * 1 + like_count * 3 + favorite_count * 5 + comment_count * 4 desc
         limit #{limit}
     </select>
 
