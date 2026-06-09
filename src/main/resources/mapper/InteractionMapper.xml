@@ -4,6 +4,11 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.campus.interaction.mapper.InteractionMapper">
+    <insert id="insertComment">
+        insert into comments (post_id, user_id, content, parent_id, created_at)
+        values (#{postId}, #{userId}, #{content}, #{parentId}, now())
+    </insert>
+
     <insert id="insertLikeRecord">
         insert into post_likes (post_id, user_id, created_at)
         values (#{postId}, #{userId}, now())
@@ -23,6 +28,11 @@
         set favorite_count = favorite_count + 1
         where id = #{postId} and status = 1
     </update>
+    <update id="incrementCommentCount">
+        update posts
+        set comment_count = comment_count + 1
+        where id = #{postId} and status = 1
+    </update>
 
 
     <select id="postIdExists" resultType="java.lang.Integer">
@@ -35,5 +45,18 @@
     <select id="ifUserFavoritedPost" resultType="java.lang.Integer">
         select count(*) from post_favorites
         where post_id = #{postId} and user_id = #{userId}
+    </select>
+    <select id="selectCommentsByPostId" resultType="com.campus.interaction.dto.CommentResponse">
+        select c.id,
+               c.post_id,
+               c.user_id,
+               u.username,
+               c.content,
+               c.parent_id,
+               c.created_at
+        from comments c
+        left join users u on u.id = c.user_id
+        where c.post_id = #{postId}
+        order by c.created_at asc, c.id asc
     </select>
 </mapper>

@@ -34,6 +34,10 @@
 
   <main class="wrap grid-detail">
     <article class="card article" id="article"></article>
+    <section class="card comments-card">
+      <h2>评论</h2>
+      <div id="commentsList" class="comments-list"></div>
+    </section>
     <aside class="right-col">
       <div class="card side-card action-card">
         <h3>操作区</h3>
@@ -41,7 +45,10 @@
           <button id="likeBtn" class="btn primary" type="button">点赞</button>
           <button id="favoriteBtn" class="btn ghost" type="button">收藏</button>
         </div>
-        <p class="muted">评论接口还没接好，这里先只联调点赞和收藏。</p>
+        <form id="commentForm" class="comment-form">
+          <textarea id="commentContent" class="comment-textarea" rows="4" placeholder="写下你的评论"></textarea>
+          <button class="btn primary block" type="submit">发布评论</button>
+        </form>
         <p id="detailMessage" class="page-message"></p>
       </div>
 

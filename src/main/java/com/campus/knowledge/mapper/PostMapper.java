@@ -15,5 +15,11 @@ public interface PostMapper {
 
     List<PostSummaryResponse> selectPosts(@Param("offset") int offset, @Param("limit") int limit);
 
+    List<PostSummaryResponse> searchPosts(@Param("keyword") String keyword,
+                                          @Param("offset") int offset,
+                                          @Param("limit") int limit);
+
+    List<PostSummaryResponse> selectHotPosts(@Param("limit") int limit);
+
     PostDetailResponse postDetail(Long id);
 }

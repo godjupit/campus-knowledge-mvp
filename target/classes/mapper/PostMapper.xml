@@ -23,6 +23,37 @@
         limit #{limit} offset #{offset}
     </select>
 
+    <select id="searchPosts" resultType="com.campus.knowledge.dto.PostSummaryResponse">
+        select id,
+               title,
+               content,
+               tags,
+               like_count,
+               favorite_count
+        from posts
+        where status = 1
+          and (title like concat('%', #{keyword}, '%')
+            or content like concat('%', #{keyword}, '%')
+            or tags like concat('%', #{keyword}, '%'))
+        <!-- TODO: 确认排序规则，默认可以按 created_at desc -->
+        order by created_at desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="selectHotPosts" resultType="com.campus.knowledge.dto.PostSummaryResponse">
+        select id,
+               title,
+               content,
+               tags,
+               like_count,
+               favorite_count
+        from posts
+        where status = 1
+        <!-- TODO: 确认热门排序规则，例如 view_count/like_count/favorite_count/comment_count 综合排序 -->
+        order by created_at desc
+        limit #{limit}
+    </select>
+
     <select id="postDetail" resultType="com.campus.knowledge.dto.PostDetailResponse">
         select id,
                title,

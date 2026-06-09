@@ -1,18 +1,17 @@
 package com.campus.interaction.service;
 
+import com.campus.interaction.dto.CommentResponse;
 import com.campus.interaction.dto.CreateCommentRequest;
+
+import java.util.List;
 
 public interface InteractionService {
 
-    // TODO: 实现评论创建
-
     void comment(CreateCommentRequest request);
 
-    // TODO: 实现点赞（幂等）
+    List<CommentResponse> listComments(Long postId);
 
     void like(Long postId);
-
-    // TODO: 实现收藏（幂等）
 
     void favorite(Long postId);
 }

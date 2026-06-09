@@ -61,12 +61,22 @@ a { text-decoration: none; color: inherit; }
 .main-nav a:hover,
 .main-nav a.active { color: var(--brand); }
 
+.search {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .search input {
   width: 100%;
   border: 1px solid #d8dce7;
   border-radius: 999px;
   padding: 10px 14px;
   background: #f8f9fc;
+}
+
+.search .btn {
+  flex: 0 0 auto;
 }
 
 .actions {
@@ -179,6 +189,26 @@ a { text-decoration: none; color: inherit; }
 
 .feed { display: grid; gap: 12px; }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 14px 0 4px;
+}
+
+.pagination .btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.page-info {
+  color: var(--muted);
+  font-weight: 700;
+  min-width: 76px;
+  text-align: center;
+}
+
 .post {
   padding: 14px;
   transition: transform .2s ease;
@@ -214,6 +244,10 @@ a { text-decoration: none; color: inherit; }
 }
 
 .right-col { display: grid; gap: 12px; align-content: start; }
+.grid-detail .right-col {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
 .side-card { padding: 14px; }
 
 .side-title-row {
@@ -306,6 +340,45 @@ a { text-decoration: none; color: inherit; }
   white-space: pre-wrap;
 }
 
+.comments-card {
+  grid-column: 1;
+  padding: 18px 20px;
+}
+
+.comments-card h2 {
+  margin: 0 0 14px;
+  font-size: 20px;
+}
+
+.comments-list {
+  display: grid;
+  gap: 12px;
+}
+
+.comment-item {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.comment-item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.comment-item p {
+  margin: 8px 0 0;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
 .detail-stats {
   display: flex;
   gap: 10px;
@@ -330,6 +403,22 @@ a { text-decoration: none; color: inherit; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+}
+
+.comment-form {
+  display: grid;
+  gap: 10px;
+}
+
+.comment-textarea {
+  width: 100%;
+  border: 1px solid #d8dce7;
+  background: #f8f9fc;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font: inherit;
+  line-height: 1.6;
+  resize: vertical;
 }
 
 .profile-head,
@@ -365,6 +454,10 @@ a { text-decoration: none; color: inherit; }
 .empty-state {
   padding: 18px;
   color: var(--muted);
+}
+
+.empty-state.compact {
+  padding: 8px 0;
 }
 
 .hidden {
@@ -440,4 +533,10 @@ a { text-decoration: none; color: inherit; }
   }
 
   .search { order: 4; }
+
+  .grid-detail .right-col,
+  .comments-card {
+    grid-column: auto;
+    grid-row: auto;
+  }
 }

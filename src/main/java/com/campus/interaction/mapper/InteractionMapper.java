@@ -1,20 +1,34 @@
 package com.campus.interaction.mapper;
 
+import com.campus.interaction.dto.CommentResponse;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface InteractionMapper {
-	// TODO: 定义评论、点赞、收藏相关 SQL 映射方法
 
-    int postIdExists(Long postId);
-    int incrementLikeCount(Long postId);
-    int incrementFavoriteCount(Long postId);
+    int postIdExists(@Param("postId") Long postId);
 
-    int ifUserLikedPost(Long userId, Long postId);
-    int ifUserFavoritedPost(Long userId, Long postId);
+    int incrementLikeCount(@Param("postId") Long postId);
 
-    void insertLikeRecord(Long userId, Long postId);
-    void insertFavoriteRecord(Long userId, Long postId);
+    int incrementFavoriteCount(@Param("postId") Long postId);
 
+    int incrementCommentCount(@Param("postId") Long postId);
 
+    int ifUserLikedPost(@Param("userId") Long userId, @Param("postId") Long postId);
+
+    int ifUserFavoritedPost(@Param("userId") Long userId, @Param("postId") Long postId);
+
+    List<CommentResponse> selectCommentsByPostId(@Param("postId") Long postId);
+
+    void insertComment(@Param("userId") Long userId,
+                       @Param("postId") Long postId,
+                       @Param("content") String content,
+                       @Param("parentId") Long parentId);
+
+    void insertLikeRecord(@Param("userId") Long userId, @Param("postId") Long postId);
+
+    void insertFavoriteRecord(@Param("userId") Long userId, @Param("postId") Long postId);
 }

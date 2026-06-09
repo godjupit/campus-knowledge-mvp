@@ -3,6 +3,7 @@ package com.campus.interaction.service.impl;
 import com.campus.common.context.UserContext;
 import com.campus.common.exception.BusinessException;
 import com.campus.common.exception.ErrorCode;
+import com.campus.interaction.dto.CommentResponse;
 import com.campus.interaction.dto.CreateCommentRequest;
 import com.campus.interaction.mapper.InteractionMapper;
 import com.campus.interaction.service.InteractionService;
@@ -10,14 +11,32 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
 public class InteractionServiceImpl implements InteractionService {
     private final InteractionMapper interactionMapper;
     @Override
+    @Transactional
     public void comment(CreateCommentRequest request){
+        Long userId = UserContext.getUserId();
+        Long postId = request.getPostId();
+        if(interactionMapper.postIdExists(postId) == 0){
+            throw new BusinessException(ErrorCode.POST_NOT_FOUND);
+        }
+        interactionMapper.insertComment(userId, postId, request.getContent(), request.getParentId());
+        interactionMapper.incrementCommentCount(postId);
 
+    }
+
+    @Override
+    public List<CommentResponse> listComments(Long postId) {
+        if(interactionMapper.postIdExists(postId) == 0){
+            throw new BusinessException(ErrorCode.POST_NOT_FOUND);
+        }
+        return interactionMapper.selectCommentsByPostId(postId);
     }
 
     @Override

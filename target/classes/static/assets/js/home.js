@@ -1,12 +1,15 @@
 (function initHomePage() {
   const app = window.CampusApp;
   const feedEl = document.getElementById("feed");
-  const feedMessageEl = document.getElementById("feedMessage");
   const searchInputEl = document.getElementById("searchInput");
+  const searchBtnEl = document.getElementById("searchBtn");
   const publishBtn = document.getElementById("publishBtn");
   const titleInputEl = document.getElementById("postTitleInput");
   const contentInputEl = document.getElementById("postContentInput");
   const tagsInputEl = document.getElementById("postTagsInput");
+  const prevPageBtn = document.getElementById("prevPageBtn");
+  const nextPageBtn = document.getElementById("nextPageBtn");
+  const pageInfoEl = document.getElementById("pageInfo");
 
   if (!app || !feedEl) {
     return;
@@ -17,6 +20,19 @@
   }
 
   let postData = [];
+  let currentPage = 1;
+  const pageSize = 10;
+  let hasNextPage = false;
+  let isSearchMode = false;
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
 
   function excerpt(content) {
     if (!content) {
@@ -34,10 +50,10 @@
     feedEl.innerHTML = list.map((item) => `
       <a href="/detail.html?id=${item.id}" class="post card post-link">
         <div>
-          <h3>${item.title || "未命名帖子"}</h3>
+          <h3>${escapeHtml(item.title || "未命名帖子")}</h3>
         </div>
-        <p>${excerpt(item.content)}</p>
-        <div class="meta">标签：${item.tags || "未分类"} · ID：${item.id}</div>
+        <p>${escapeHtml(excerpt(item.content))}</p>
+        <div class="meta">标签：${escapeHtml(item.tags || "未分类")} · ID：${item.id}</div>
         <div class="card-actions">
           <span class="card-count">点赞 ${item.likeCount || 0}</span>
           <span class="card-count">收藏 ${item.favoriteCount || 0}</span>
@@ -46,6 +62,31 @@
         </div>
       </a>
     `).join("");
+  }
+
+  function updatePagination() {
+    if (isSearchMode) {
+      if (pageInfoEl) {
+        pageInfoEl.textContent = "\u641c\u7d22\u7ed3\u679c";
+      }
+      if (prevPageBtn) {
+        prevPageBtn.disabled = true;
+      }
+      if (nextPageBtn) {
+        nextPageBtn.disabled = true;
+      }
+      return;
+    }
+
+    if (pageInfoEl) {
+      pageInfoEl.textContent = `第 ${currentPage} 页`;
+    }
+    if (prevPageBtn) {
+      prevPageBtn.disabled = currentPage <= 1;
+    }
+    if (nextPageBtn) {
+      nextPageBtn.disabled = !hasNextPage;
+    }
   }
 
   async function loadCurrentUser() {
@@ -59,15 +100,40 @@
     return user;
   }
 
-  async function loadPosts() {
+  async function loadPosts(page) {
     try {
-      postData = await app.request("/api/posts?page=1&size=10");
+      isSearchMode = false;
+      currentPage = page || currentPage;
+      postData = await app.request(`/api/posts?page=${currentPage}&size=${pageSize}`);
+      hasNextPage = postData.length === pageSize;
       renderFeed(postData);
+      updatePagination();
     } catch (error) {
-      feedEl.innerHTML = `<div class="card empty-state">${error.message}</div>`;
+      feedEl.innerHTML = `<div class="card empty-state">${escapeHtml(error.message)}</div>`;
     }
   }
 
+  async function searchPosts() {
+    const keyword = searchInputEl.value.trim();
+    app.setMessage("#feedMessage", "");
+
+    if (!keyword) {
+      await loadPosts(1);
+      return;
+    }
+
+    try {
+      isSearchMode = true;
+      currentPage = 1;
+      postData = await app.request(`/api/search?keyword=${encodeURIComponent(keyword)}&page=1&size=${pageSize}`);
+      hasNextPage = false;
+      renderFeed(postData);
+      updatePagination();
+    } catch (error) {
+      feedEl.innerHTML = `<div class="card empty-state">${escapeHtml(error.message)}</div>`;
+      updatePagination();
+    }
+  }
   async function handleCardAction(action, postId) {
     app.setMessage("#feedMessage", "");
     const path = action === "like" ? `/api/posts/${postId}/like` : `/api/posts/${postId}/favorite`;
@@ -75,7 +141,11 @@
 
     try {
       await app.request(path, { method: "POST" });
-      await loadPosts();
+      if (isSearchMode) {
+        await searchPosts();
+      } else {
+        await loadPosts(currentPage);
+      }
       app.setMessage("#feedMessage", successMessage, "success");
     } catch (error) {
       app.setMessage("#feedMessage", error.message, "error");
@@ -97,30 +167,38 @@
       titleInputEl.value = "";
       contentInputEl.value = "";
       tagsInputEl.value = "";
+      searchInputEl.value = "";
       app.setMessage("#publishMessage", "发布成功，已重新加载帖子列表。", "success");
-      await loadPosts();
+      await loadPosts(1);
     } catch (error) {
       app.setMessage("#publishMessage", error.message, "error");
     }
   }
 
-  searchInputEl.addEventListener("input", function onSearch(event) {
-    const keyword = event.target.value.trim().toLowerCase();
-    if (!keyword) {
-      renderFeed(postData);
-      return;
+  searchBtnEl.addEventListener("click", searchPosts);
+  searchInputEl.addEventListener("keydown", function onSearchKeydown(event) {
+    if (event.key === "Enter") {
+      searchPosts();
     }
-
-    const filtered = postData.filter((item) => {
-      const title = String(item.title || "").toLowerCase();
-      const content = String(item.content || "").toLowerCase();
-      const tags = String(item.tags || "").toLowerCase();
-      return title.includes(keyword) || content.includes(keyword) || tags.includes(keyword);
-    });
-    renderFeed(filtered);
   });
 
   publishBtn.addEventListener("click", publishPost);
+  prevPageBtn.addEventListener("click", function onPrevPage() {
+    if (currentPage <= 1) {
+      return;
+    }
+    searchInputEl.value = "";
+    app.setMessage("#feedMessage", "");
+    loadPosts(currentPage - 1);
+  });
+  nextPageBtn.addEventListener("click", function onNextPage() {
+    if (!hasNextPage) {
+      return;
+    }
+    searchInputEl.value = "";
+    app.setMessage("#feedMessage", "");
+    loadPosts(currentPage + 1);
+  });
   feedEl.addEventListener("click", function onFeedClick(event) {
     const button = event.target.closest(".card-action-btn");
     if (!button) {
@@ -133,5 +211,8 @@
     handleCardAction(action, postId);
   });
 
-  loadCurrentUser().then(loadPosts);
+  updatePagination();
+  loadCurrentUser().then(function afterUserLoaded() {
+    loadPosts(1);
+  });
 })();

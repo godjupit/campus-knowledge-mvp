@@ -22,7 +22,8 @@
         <a href="/auth.html">登录/注册</a>
       </nav>
       <div class="search">
-        <input id="searchInput" placeholder="按标题、内容、标签做前端过滤">
+        <input id="searchInput" placeholder="&#25353;&#26631;&#39064;&#12289;&#20869;&#23481;&#12289;&#26631;&#31614;&#25628;&#32034;">
+        <button id="searchBtn" class="btn primary" type="button">&#25628;&#32034;</button>
       </div>
       <div class="actions">
         <a id="authLink" class="btn ghost" href="/auth.html">去登录</a>
@@ -52,6 +53,11 @@
       </div>
 
       <div id="feed" class="feed"></div>
+      <div class="pagination">
+        <button id="prevPageBtn" class="btn ghost" type="button">上一页</button>
+        <span id="pageInfo" class="page-info">第 1 页</span>
+        <button id="nextPageBtn" class="btn ghost" type="button">下一页</button>
+      </div>
       <p id="feedMessage" class="page-message"></p>
     </section>
 

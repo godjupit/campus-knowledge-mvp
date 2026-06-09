@@ -1,9 +1,12 @@
 (function initDetailPage() {
   const app = window.CampusApp;
   const articleEl = document.getElementById("article");
+  const commentsListEl = document.getElementById("commentsList");
   const relatedListEl = document.getElementById("relatedList");
   const likeBtn = document.getElementById("likeBtn");
   const favoriteBtn = document.getElementById("favoriteBtn");
+  const commentForm = document.getElementById("commentForm");
+  const commentContent = document.getElementById("commentContent");
 
   if (!app || !articleEl) {
     return;
@@ -43,10 +46,61 @@
     `).join("");
   }
 
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function formatTime(value) {
+    if (!value) {
+      return "";
+    }
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return String(value).replace("T", " ");
+    }
+    return date.toLocaleString("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function renderComments(comments) {
+    if (!commentsListEl) {
+      return;
+    }
+    if (!comments.length) {
+      commentsListEl.innerHTML = '<div class="empty-state compact">暂无评论</div>';
+      return;
+    }
+    commentsListEl.innerHTML = comments.map((comment) => `
+      <div class="comment-item">
+        <div class="comment-meta">
+          <span class="avatar tiny">${escapeHtml((comment.username || "U").charAt(0).toUpperCase())}</span>
+          <strong>${escapeHtml(comment.username || "匿名用户")}</strong>
+          <span>${escapeHtml(formatTime(comment.createdAt))}</span>
+        </div>
+        <p>${escapeHtml(comment.content)}</p>
+      </div>
+    `).join("");
+  }
+
   async function loadPost(id) {
     const post = await app.request(`/api/posts/${id}`);
     renderArticle(post);
     return post;
+  }
+
+  async function loadComments(id) {
+    const comments = await app.request(`/api/posts/${id}/comments`);
+    renderComments(comments || []);
   }
 
   async function init() {
@@ -83,8 +137,36 @@
       handleAction(`/api/posts/${id}/favorite`, "收藏成功。");
     });
 
+    commentForm.addEventListener("submit", async function onComment(event) {
+      event.preventDefault();
+      app.setMessage("#detailMessage", "");
+
+      const content = commentContent.value.trim();
+      if (!content) {
+        app.setMessage("#detailMessage", "评论内容不能为空", "error");
+        return;
+      }
+
+      try {
+        await app.request("/api/comments", {
+          method: "POST",
+          body: {
+            postId: id,
+            content
+          }
+        });
+        commentContent.value = "";
+        await loadPost(id);
+        await loadComments(id);
+        app.setMessage("#detailMessage", "评论发布成功。", "success");
+      } catch (error) {
+        app.setMessage("#detailMessage", error.message, "error");
+      }
+    });
+
     try {
       await loadPost(id);
+      await loadComments(id);
       const posts = await app.request("/api/posts?page=1&size=10");
       renderRelated(posts, id);
     } catch (error) {
