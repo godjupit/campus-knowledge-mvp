@@ -11,7 +11,12 @@
     </insert>
 
     <select id="selectPosts" resultType="com.campus.knowledge.dto.PostSummaryResponse">
-        select id, title, content, tags
+        select id,
+               title,
+               content,
+               tags,
+               like_count,
+               favorite_count
         from posts
         where status = 1
         order by created_at desc

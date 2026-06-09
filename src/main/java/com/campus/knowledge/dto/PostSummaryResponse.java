@@ -12,4 +12,6 @@ public class PostSummaryResponse {
     private String title;
     private String content;
     private String tags;
+    private Integer likeCount;
+    private Integer favoriteCount;
 }

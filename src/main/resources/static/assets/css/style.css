@@ -189,6 +189,30 @@ a { text-decoration: none; color: inherit; }
 .post p { margin: 0; color: #4b5563; line-height: 1.65; }
 .post .meta { margin-top: 10px; color: var(--muted); font-size: 12px; }
 
+.post-link {
+  display: block;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.card-count {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f6fb;
+}
+
+.card-action-btn {
+  padding: 6px 12px;
+}
+
 .right-col { display: grid; gap: 12px; align-content: start; }
 .side-card { padding: 14px; }
 
@@ -210,6 +234,44 @@ a { text-decoration: none; color: inherit; }
   border: 1px solid var(--line);
   border-radius: 9px;
   padding: 8px;
+}
+
+.task-card {
+  min-height: 320px;
+}
+
+.task-badge {
+  font-size: 12px;
+  color: var(--brand);
+  background: #edf3ff;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.task-box {
+  margin-top: 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px dashed #cfd7e6;
+  border-radius: 12px;
+  background: #f8f9fc;
+}
+
+.task-row strong {
+  font-size: 15px;
+}
+
+.task-row span {
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .stats {
@@ -242,6 +304,32 @@ a { text-decoration: none; color: inherit; }
 .article-content {
   line-height: 1.8;
   white-space: pre-wrap;
+}
+
+.detail-stats {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.detail-stats span {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f6fb;
+}
+
+.action-card {
+  display: grid;
+  gap: 12px;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 .profile-head,

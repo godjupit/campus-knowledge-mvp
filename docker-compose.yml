@@ -5,7 +5,7 @@ services:
     container_name: campus-knowledge-mvp-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: 20180710
       MYSQL_DATABASE: campus_knowledge_mvp
       TZ: Asia/Shanghai
     ports:

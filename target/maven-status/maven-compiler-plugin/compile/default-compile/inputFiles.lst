@@ -23,6 +23,7 @@ D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\util\JwtUtil
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\interaction\controller\InteractionController.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\interaction\dto\CreateCommentRequest.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\interaction\mapper\InteractionMapper.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\interaction\service\impl\InteractionServiceImpl.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\interaction\service\InteractionService.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\controller\PostController.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\knowledge\dto\CreatePostRequest.java

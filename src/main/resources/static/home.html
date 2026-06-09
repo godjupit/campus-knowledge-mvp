@@ -43,43 +43,38 @@
         <textarea id="postContentInput" class="compose-textarea" placeholder="内容：记录你的思路、步骤和踩坑点"></textarea>
         <input id="postTagsInput" class="compose-tags" placeholder="标签：例如 springboot,java,mybatis">
         <div class="compose-tools">
-          <span>当前已接通：发布帖子</span>
-          <span>待你后端完成：评论</span>
-          <span>待你后端完成：点赞</span>
-          <span>待你后端完成：收藏</span>
+          <span>已接通：发帖</span>
+          <span>已接通：点赞</span>
+          <span>已接通：收藏</span>
+          <span>待完成：评论</span>
         </div>
         <p id="publishMessage" class="page-message"></p>
       </div>
 
       <div id="feed" class="feed"></div>
+      <p id="feedMessage" class="page-message"></p>
     </section>
 
     <aside class="right-col">
-      <div class="card side-card">
-        <h3>当前后端进度</h3>
-        <div class="stats">
-          <div><strong>6</strong><span>已接通接口</span></div>
-          <div><strong>3</strong><span>已完成主线模块</span></div>
-        </div>
-        <p class="muted side-note">当前前端只依赖注册、登录、当前用户、发帖、列表、详情接口。</p>
-      </div>
-
-      <div class="card side-card">
+      <div class="card side-card task-card">
         <div class="side-title-row">
-          <h3>当前登录状态</h3>
+          <h3>热榜任务框</h3>
+          <span class="task-badge">预留</span>
         </div>
-        <div id="currentUserCard" class="status-panel">
-          <p class="muted">未登录时无法访问当前后端接口。</p>
+        <div class="task-box">
+          <div class="task-row">
+            <strong>搜索接口</strong>
+            <span>待开发</span>
+          </div>
+          <div class="task-row">
+            <strong>热榜接口</strong>
+            <span>待开发</span>
+          </div>
+          <div class="task-row">
+            <strong>推荐接口</strong>
+            <span>待开发</span>
+          </div>
         </div>
-      </div>
-
-      <div class="card side-card">
-        <h3>练习提示</h3>
-        <ul class="quick-list">
-          <li><a href="/profile.html">查看当前用户接口效果</a></li>
-          <li><a href="/docs/backend-practice-roadmap.md">按文档推进后端练习</a></li>
-          <li><span>搜索、热门、推荐暂不接前端真实请求</span></li>
-        </ul>
       </div>
     </aside>
   </main>
