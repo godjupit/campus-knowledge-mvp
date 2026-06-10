@@ -6,7 +6,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@MapperScan("com.campus.*.mapper")
+@MapperScan({
+        "com.campus.modules.auth.mapper",
+        "com.campus.modules.knowledge.mapper",
+        "com.campus.modules.interaction.mapper",
+        "com.campus.modules.notification.mapper",
+        "com.campus.infrastructure.event.mapper"
+})
 @EnableScheduling
 public class CampusKnowledgeMvpApplication {
 

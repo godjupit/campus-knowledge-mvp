@@ -3,14 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.campus.event.mapper.EventOutboxMapper">
+<mapper namespace="com.campus.infrastructure.event.mapper.EventOutboxMapper">
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         insert into event_outbox (event_type, routing_key, payload, status, retry_count)
         values (#{eventType}, #{routingKey}, #{payload}, 'PENDING', 0)
     </insert>
 
-    <select id="selectPending" resultType="com.campus.event.entity.EventOutbox">
+    <select id="selectPending" resultType="com.campus.infrastructure.event.entity.EventOutbox">
         select id,
                event_type,
                routing_key,

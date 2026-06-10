@@ -1,6 +1,6 @@
 package com.campus.common.config;
 
-import com.campus.auth.interceptor.JwtAuthInterceptor;
+import com.campus.modules.auth.interceptor.JwtAuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
