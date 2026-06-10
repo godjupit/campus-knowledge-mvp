@@ -8,6 +8,7 @@ import com.campus.knowledge.dto.PostDetailResponse;
 import com.campus.knowledge.dto.PostSummaryResponse;
 import com.campus.knowledge.entity.Post;
 import com.campus.knowledge.mapper.PostMapper;
+import com.campus.knowledge.service.PostViewCountService;
 import com.campus.knowledge.service.PostService;
 import com.campus.search.service.HotPostsCacheService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostMapper postMapper;
     private final HotPostsCacheService hotPostsCacheService;
+    private final PostViewCountService postViewCountService;
 
     @Override
     public List<PostSummaryResponse> list(Integer page, Integer size) {
@@ -40,6 +42,8 @@ public class PostServiceImpl implements PostService {
         if (response == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
+        long pendingViews = postViewCountService.recordView(id);
+        response.setViewCount(response.getViewCount() + Math.toIntExact(pendingViews));
         return response;
     }
 

@@ -56,6 +56,13 @@
         limit #{limit}
     </select>
 
+    <update id="incrementViewCount">
+        update posts
+        set view_count = view_count + #{delta}
+        where id = #{postId}
+          and status = 1
+    </update>
+
     <select id="postDetail" resultType="com.campus.knowledge.dto.PostDetailResponse">
         select id,
                title,

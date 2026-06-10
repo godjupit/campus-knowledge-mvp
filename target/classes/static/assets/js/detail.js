@@ -26,6 +26,7 @@
       <h1>${post.title || "未命名帖子"}</h1>
       <p class="muted">帖子 ID：${post.id} · 标签：${post.tags || "未分类"}</p>
       <div class="detail-stats">
+        <span>&#27983;&#35272; ${post.viewCount || 0}</span>
         <span>点赞 ${post.likeCount || 0}</span>
         <span>收藏 ${post.favoriteCount || 0}</span>
         <span>评论 ${post.commentCount || 0}</span>
