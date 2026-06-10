@@ -5,6 +5,7 @@ D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\context\User
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\exception\BusinessException.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\exception\ErrorCode.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\exception\GlobalExceptionHandler.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\ratelimit\RedisRateLimitService.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\result\ApiResponse.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\util\JwtUtil.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\infrastructure\event\config\RabbitMqConfig.java

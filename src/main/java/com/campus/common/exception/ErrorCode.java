@@ -6,6 +6,7 @@ public enum ErrorCode {
     PARAM_INVALID(10003, "参数错误", 400),
     LOGIN_FAILED(10004, "身份异常", 401),
     POST_NOT_FOUND(20001, "帖子不存在", 404),
+    RATE_LIMITED(30001, "\u64cd\u4f5c\u8fc7\u4e8e\u9891\u7e41\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5", 429),
     SYSTEM_ERROR(99999, "系统异常", 500);
 
     private final int code;

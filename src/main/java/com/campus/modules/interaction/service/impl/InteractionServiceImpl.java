@@ -3,6 +3,7 @@ package com.campus.modules.interaction.service.impl;
 import com.campus.common.context.UserContext;
 import com.campus.common.exception.BusinessException;
 import com.campus.common.exception.ErrorCode;
+import com.campus.common.ratelimit.RedisRateLimitService;
 import com.campus.infrastructure.event.config.RabbitMqConfig;
 import com.campus.infrastructure.event.service.EventOutboxService;
 import com.campus.infrastructure.event.support.EventMessageFactory;
@@ -15,20 +16,30 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
 public class InteractionServiceImpl implements InteractionService {
+    private static final Duration LIKE_RATE_LIMIT_WINDOW = Duration.ofSeconds(10);
+    private static final Duration FAVORITE_RATE_LIMIT_WINDOW = Duration.ofSeconds(10);
+    private static final Duration COMMENT_RATE_LIMIT_WINDOW = Duration.ofMinutes(1);
+    private static final int LIKE_RATE_LIMIT = 20;
+    private static final int FAVORITE_RATE_LIMIT = 20;
+    private static final int COMMENT_RATE_LIMIT = 10;
+
     private final InteractionMapper interactionMapper;
     private final HotPostCacheService hotPostCacheService;
     private final EventOutboxService eventOutboxService;
+    private final RedisRateLimitService redisRateLimitService;
 
     @Override
     @Transactional
     public void comment(CreateCommentRequest request){
         Long userId = UserContext.getUserId();
+        redisRateLimitService.checkUserLimit("comment", userId, COMMENT_RATE_LIMIT, COMMENT_RATE_LIMIT_WINDOW);
         Long postId = request.getPostId();
         if(interactionMapper.postIdExists(postId) == 0){
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
@@ -54,6 +65,7 @@ public class InteractionServiceImpl implements InteractionService {
     @Transactional
     public void like(Long postId) {
         Long userId = UserContext.getUserId();
+        redisRateLimitService.checkUserLimit("like", userId, LIKE_RATE_LIMIT, LIKE_RATE_LIMIT_WINDOW);
         if(interactionMapper.postIdExists(postId) == 0){
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
@@ -74,6 +86,7 @@ public class InteractionServiceImpl implements InteractionService {
     @Transactional
     public void favorite(Long postId) {
         Long userId = UserContext.getUserId();
+        redisRateLimitService.checkUserLimit("favorite", userId, FAVORITE_RATE_LIMIT, FAVORITE_RATE_LIMIT_WINDOW);
         if(interactionMapper.postIdExists(postId) == 0){
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
