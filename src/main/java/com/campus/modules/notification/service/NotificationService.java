@@ -8,5 +8,7 @@ public interface NotificationService {
 
     void createCommentNotification(Long postId, Long actorUserId, String contentPreview);
 
+    void createLikeNotification(Long postId, Long actorUserId);
+
     List<NotificationResponse> listMine(Integer page, Integer size);
 }

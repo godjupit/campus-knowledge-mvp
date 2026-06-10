@@ -38,6 +38,9 @@ public class NotificationEventListener {
         if (isDuplicate(message)) {
             return;
         }
+        notificationService.createLikeNotification(
+                message.getPostId(),
+                message.getActorUserId());
         log.info("like.created consumed, eventId={}, postId={}, actorUserId={}",
                 message.getEventId(),
                 message.getPostId(),

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -44,10 +45,33 @@ public class SearchServiceImpl implements SearchService {
             return cachedPosts;
         }
 
-        List<PostSummaryResponse> hotPosts = postMapper.selectHotPosts(HOT_LIMIT);
-        hotPostCacheService.write(hotPosts);
-        logHotPostsResult("database", hotPosts.size(), startNanos);
-        return hotPosts;
+        String lockValue = UUID.randomUUID().toString();
+        if (hotPostCacheService.tryLock(lockValue)) {
+            try {
+                List<PostSummaryResponse> doubleCheckedPosts = hotPostCacheService.read();
+                if (doubleCheckedPosts != null) {
+                    logHotPostsResult("redis_after_lock", doubleCheckedPosts.size(), startNanos);
+                    return doubleCheckedPosts;
+                }
+
+                List<PostSummaryResponse> hotPosts = postMapper.selectHotPosts(HOT_LIMIT);
+                hotPostCacheService.write(hotPosts);
+                logHotPostsResult("database_with_lock", hotPosts.size(), startNanos);
+                return hotPosts;
+            } finally {
+                hotPostCacheService.unlock(lockValue);
+            }
+        }
+
+        List<PostSummaryResponse> retryPosts = hotPostCacheService.readAfterShortWait();
+        if (retryPosts != null) {
+            logHotPostsResult("redis_after_wait", retryPosts.size(), startNanos);
+            return retryPosts;
+        }
+
+        List<PostSummaryResponse> fallbackPosts = postMapper.selectHotPosts(HOT_LIMIT);
+        logHotPostsResult("database_fallback_no_lock", fallbackPosts.size(), startNanos);
+        return fallbackPosts;
     }
 
     private void logHotPostsResult(String source, int size, long startNanos) {

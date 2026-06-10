@@ -17,7 +17,10 @@ import java.util.List;
 public class HotPostCacheService {
 
     private static final String HOT_POSTS_CACHE_KEY = "hot:posts:top10";
+    private static final String HOT_POSTS_LOCK_KEY = "hot:posts:top10:lock";
     private static final Duration HOT_POSTS_CACHE_TTL = Duration.ofSeconds(60);
+    private static final Duration HOT_POSTS_LOCK_TTL = Duration.ofSeconds(5);
+    private static final Duration HOT_POSTS_LOCK_WAIT = Duration.ofMillis(50);
 
     private final StringRedisTemplate stringRedisTemplate;
     private final ObjectMapper objectMapper;
@@ -82,6 +85,58 @@ public class HotPostCacheService {
                     elapsedMillis(startNanos),
                     ignored);
         }
+    }
+
+    public boolean tryLock(String lockValue) {
+        long startNanos = System.nanoTime();
+        try {
+            Boolean locked = stringRedisTemplate.opsForValue()
+                    .setIfAbsent(HOT_POSTS_LOCK_KEY, lockValue, HOT_POSTS_LOCK_TTL);
+            boolean success = Boolean.TRUE.equals(locked);
+            log.debug("hot posts cache rebuild lock {}, key={}, cost={}ms",
+                    success ? "acquired" : "not_acquired",
+                    HOT_POSTS_LOCK_KEY,
+                    elapsedMillis(startNanos));
+            return success;
+        } catch (Exception exception) {
+            log.warn("hot posts cache rebuild lock failed, key={}, cost={}ms",
+                    HOT_POSTS_LOCK_KEY,
+                    elapsedMillis(startNanos),
+                    exception);
+            return false;
+        }
+    }
+
+    public void unlock(String lockValue) {
+        long startNanos = System.nanoTime();
+        try {
+            String currentValue = stringRedisTemplate.opsForValue().get(HOT_POSTS_LOCK_KEY);
+            if (!lockValue.equals(currentValue)) {
+                log.debug("skip hot posts cache rebuild unlock, key={}, ownerChanged=true, cost={}ms",
+                        HOT_POSTS_LOCK_KEY,
+                        elapsedMillis(startNanos));
+                return;
+            }
+            Boolean deleted = stringRedisTemplate.delete(HOT_POSTS_LOCK_KEY);
+            log.debug("hot posts cache rebuild lock released, key={}, deleted={}, cost={}ms",
+                    HOT_POSTS_LOCK_KEY,
+                    deleted,
+                    elapsedMillis(startNanos));
+        } catch (Exception exception) {
+            log.warn("hot posts cache rebuild unlock failed, key={}, cost={}ms",
+                    HOT_POSTS_LOCK_KEY,
+                    elapsedMillis(startNanos),
+                    exception);
+        }
+    }
+
+    public List<PostSummaryResponse> readAfterShortWait() {
+        try {
+            Thread.sleep(HOT_POSTS_LOCK_WAIT.toMillis());
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+        }
+        return read();
     }
 
     private double elapsedMillis(long startNanos) {

@@ -21,35 +21,27 @@ public class NotificationServiceImpl implements NotificationService {
     private static final int DEFAULT_SIZE = 10;
     private static final int MAX_SIZE = 50;
     private static final String COMMENT_NOTIFICATION_TYPE = "COMMENT_CREATED";
+    private static final String LIKE_NOTIFICATION_TYPE = "LIKE_CREATED";
 
     private final NotificationMapper notificationMapper;
     private final PostMapper postMapper;
 
     @Override
     public void createCommentNotification(Long postId, Long actorUserId, String contentPreview) {
-        Long receiverUserId = postMapper.selectPostOwnerId(postId);
-        if (receiverUserId == null) {
-            log.warn("skip comment notification because post owner not found, postId={}", postId);
-            return;
-        }
-        if (receiverUserId.equals(actorUserId)) {
-            log.info("skip comment notification for self comment, postId={}, actorUserId={}", postId, actorUserId);
-            return;
-        }
-
-        Notification notification = new Notification();
-        notification.setReceiverUserId(receiverUserId);
-        notification.setActorUserId(actorUserId);
-        notification.setType(COMMENT_NOTIFICATION_TYPE);
-        notification.setPostId(postId);
-        notification.setContent(buildCommentContent(contentPreview));
-        notificationMapper.insert(notification);
-
-        log.info("comment notification created, notificationId={}, receiverUserId={}, actorUserId={}, postId={}",
-                notification.getId(),
-                receiverUserId,
+        createPostOwnerNotification(
+                postId,
                 actorUserId,
-                postId);
+                COMMENT_NOTIFICATION_TYPE,
+                buildCommentContent(contentPreview));
+    }
+
+    @Override
+    public void createLikeNotification(Long postId, Long actorUserId) {
+        createPostOwnerNotification(
+                postId,
+                actorUserId,
+                LIKE_NOTIFICATION_TYPE,
+                "\u6709\u4eba\u70b9\u8d5e\u4e86\u4f60\u7684\u5e16\u5b50");
     }
 
     @Override
@@ -61,10 +53,37 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationMapper.selectByReceiver(userId, offset, safeSize);
     }
 
+    private void createPostOwnerNotification(Long postId, Long actorUserId, String type, String content) {
+        Long receiverUserId = postMapper.selectPostOwnerId(postId);
+        if (receiverUserId == null) {
+            log.warn("skip notification because post owner not found, type={}, postId={}", type, postId);
+            return;
+        }
+        if (receiverUserId.equals(actorUserId)) {
+            log.info("skip notification for self action, type={}, postId={}, actorUserId={}", type, postId, actorUserId);
+            return;
+        }
+
+        Notification notification = new Notification();
+        notification.setReceiverUserId(receiverUserId);
+        notification.setActorUserId(actorUserId);
+        notification.setType(type);
+        notification.setPostId(postId);
+        notification.setContent(content);
+        notificationMapper.insert(notification);
+
+        log.info("notification created, type={}, notificationId={}, receiverUserId={}, actorUserId={}, postId={}",
+                type,
+                notification.getId(),
+                receiverUserId,
+                actorUserId,
+                postId);
+    }
+
     private String buildCommentContent(String contentPreview) {
         if (contentPreview == null || contentPreview.isBlank()) {
-            return "有人评论了你的帖子";
+            return "\u6709\u4eba\u8bc4\u8bba\u4e86\u4f60\u7684\u5e16\u5b50";
         }
-        return "有人评论了你的帖子：" + contentPreview;
+        return "\u6709\u4eba\u8bc4\u8bba\u4e86\u4f60\u7684\u5e16\u5b50\uff1a" + contentPreview;
     }
 }
