@@ -21,6 +21,8 @@ public interface PostMapper {
 
     List<PostSummaryResponse> selectHotPosts(@Param("limit") int limit);
 
+    List<PostSummaryResponse> selectPostsForRag(@Param("limit") int limit);
+
     int incrementViewCount(@Param("postId") Long postId, @Param("delta") Long delta);
 
     Long selectPostOwnerId(@Param("postId") Long postId);

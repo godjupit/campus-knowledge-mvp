@@ -17,6 +17,15 @@ D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\infrastructure\even
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\infrastructure\event\service\EventOutboxService.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\infrastructure\event\service\impl\EventOutboxServiceImpl.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\infrastructure\event\support\EventMessageFactory.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\agent\config\RagConfig.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\agent\config\RagProperties.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\agent\controller\AgentController.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\agent\dto\AgentAskRequest.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\agent\dto\AgentAskResponse.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\agent\dto\AgentIndexResponse.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\agent\dto\AgentReferenceResponse.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\agent\service\AgentService.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\agent\service\impl\AgentServiceImpl.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\auth\controller\AuthController.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\auth\controller\UserController.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\modules\auth\dto\LoginRequest.java

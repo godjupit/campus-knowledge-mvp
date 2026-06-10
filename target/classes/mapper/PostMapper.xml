@@ -56,6 +56,19 @@
         limit #{limit}
     </select>
 
+    <select id="selectPostsForRag" resultType="com.campus.modules.knowledge.dto.PostSummaryResponse">
+        select id,
+               title,
+               content,
+               tags,
+               like_count,
+               favorite_count
+        from posts
+        where status = 1
+        order by created_at desc
+        limit #{limit}
+    </select>
+
     <update id="incrementViewCount">
         update posts
         set view_count = view_count + #{delta}

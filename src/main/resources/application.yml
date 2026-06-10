@@ -27,6 +27,18 @@ spring:
     listener:
       simple:
         missing-queues-fatal: false
+  ai:
+    model:
+      chat: ${SPRING_AI_MODEL_CHAT:none}
+      embedding: ${SPRING_AI_MODEL_EMBEDDING:none}
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      chat:
+        options:
+          model: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
+      embedding:
+        options:
+          model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
 
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
@@ -37,3 +49,16 @@ mybatis:
 jwt:
   secret: campus-secret-campus-secret-123456
   expire-hours: 48
+
+campus:
+  rag:
+    enabled: false
+    top-k: 5
+    index-batch-size: 100
+    pgvector:
+      jdbc-url: jdbc:postgresql://127.0.0.1:5432/campus_rag
+      username: postgres
+      password: postgres
+      schema-name: public
+      table-name: campus_post_vectors
+      dimensions: 1536
