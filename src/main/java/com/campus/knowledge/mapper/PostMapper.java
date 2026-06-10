@@ -23,5 +23,7 @@ public interface PostMapper {
 
     int incrementViewCount(@Param("postId") Long postId, @Param("delta") Long delta);
 
+    Long selectPostOwnerId(@Param("postId") Long postId);
+
     PostDetailResponse postDetail(Long id);
 }

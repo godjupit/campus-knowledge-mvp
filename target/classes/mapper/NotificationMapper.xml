@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campus.notification.mapper.NotificationMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into notifications (
+            receiver_user_id,
+            actor_user_id,
+            type,
+            post_id,
+            content,
+            read_flag
+        )
+        values (
+            #{receiverUserId},
+            #{actorUserId},
+            #{type},
+            #{postId},
+            #{content},
+            0
+        )
+    </insert>
+
+    <select id="selectByReceiver" resultType="com.campus.notification.dto.NotificationResponse">
+        select n.id,
+               n.actor_user_id,
+               u.username as actor_username,
+               n.type,
+               n.post_id,
+               n.content,
+               n.read_flag,
+               n.created_at
+        from notifications n
+        left join users u on u.id = n.actor_user_id
+        where n.receiver_user_id = #{receiverUserId}
+        order by n.created_at desc, n.id desc
+        limit #{limit} offset #{offset}
+    </select>
+</mapper>

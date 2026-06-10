@@ -76,3 +76,16 @@ CREATE TABLE IF NOT EXISTS event_outbox (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_event_outbox_status_retry_created(status, retry_count, created_at)
 );
+
+CREATE TABLE IF NOT EXISTS notifications (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    receiver_user_id BIGINT NOT NULL,
+    actor_user_id BIGINT NOT NULL,
+    type VARCHAR(64) NOT NULL,
+    post_id BIGINT DEFAULT NULL,
+    content VARCHAR(500) NOT NULL,
+    read_flag TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_notifications_receiver_created(receiver_user_id, created_at),
+    INDEX idx_notifications_receiver_read(receiver_user_id, read_flag)
+);

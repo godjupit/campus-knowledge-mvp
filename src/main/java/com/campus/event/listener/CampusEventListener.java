@@ -3,6 +3,7 @@ package com.campus.event.listener;
 import com.campus.event.config.RabbitMqConfig;
 import com.campus.event.dto.EventMessage;
 import com.campus.event.service.EventConsumeIdempotencyService;
+import com.campus.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -14,12 +15,17 @@ import org.springframework.stereotype.Component;
 public class CampusEventListener {
 
     private final EventConsumeIdempotencyService eventConsumeIdempotencyService;
+    private final NotificationService notificationService;
 
     @RabbitListener(queues = RabbitMqConfig.COMMENT_CREATED_QUEUE)
     public void onCommentCreated(EventMessage message) {
         if (isDuplicate(message)) {
             return;
         }
+        notificationService.createCommentNotification(
+                message.getPostId(),
+                message.getActorUserId(),
+                message.getContentPreview());
         log.info("comment.created consumed, eventId={}, postId={}, actorUserId={}, preview={}",
                 message.getEventId(),
                 message.getPostId(),
