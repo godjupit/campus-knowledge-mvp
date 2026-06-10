@@ -64,3 +64,15 @@ CREATE TABLE IF NOT EXISTS login_sessions (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uk_token_jti(token_jti)
 );
+
+CREATE TABLE IF NOT EXISTS event_outbox (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    event_type VARCHAR(64) NOT NULL,
+    routing_key VARCHAR(128) NOT NULL,
+    payload TEXT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    retry_count INT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_event_outbox_status_retry_created(status, retry_count, created_at)
+);

@@ -20,6 +20,15 @@ D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\exception\Er
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\exception\GlobalExceptionHandler.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\result\ApiResponse.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\common\util\JwtUtil.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\event\config\RabbitMqConfig.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\event\dto\EventMessage.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\event\entity\EventOutbox.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\event\listener\CampusEventListener.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\event\mapper\EventOutboxMapper.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\event\service\EventConsumeIdempotencyService.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\event\service\EventOutboxService.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\event\service\impl\EventOutboxServiceImpl.java
+D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\event\support\EventMessageFactory.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\interaction\controller\InteractionController.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\interaction\dto\CommentResponse.java
 D:\javaProgram\campus-knowledge-mvp\src\main\java\com\campus\interaction\dto\CreateCommentRequest.java

@@ -3,6 +3,9 @@ package com.campus.interaction.service.impl;
 import com.campus.common.context.UserContext;
 import com.campus.common.exception.BusinessException;
 import com.campus.common.exception.ErrorCode;
+import com.campus.event.config.RabbitMqConfig;
+import com.campus.event.service.EventOutboxService;
+import com.campus.event.support.EventMessageFactory;
 import com.campus.interaction.dto.CommentResponse;
 import com.campus.interaction.dto.CreateCommentRequest;
 import com.campus.interaction.mapper.InteractionMapper;
@@ -20,6 +23,7 @@ import java.util.List;
 public class InteractionServiceImpl implements InteractionService {
     private final InteractionMapper interactionMapper;
     private final HotPostsCacheService hotPostsCacheService;
+    private final EventOutboxService eventOutboxService;
 
     @Override
     @Transactional
@@ -31,6 +35,10 @@ public class InteractionServiceImpl implements InteractionService {
         }
         interactionMapper.insertComment(userId, postId, request.getContent(), request.getParentId());
         interactionMapper.incrementCommentCount(postId);
+        eventOutboxService.saveEvent(
+                RabbitMqConfig.COMMENT_CREATED_ROUTING_KEY,
+                RabbitMqConfig.COMMENT_CREATED_ROUTING_KEY,
+                EventMessageFactory.create(RabbitMqConfig.COMMENT_CREATED_ROUTING_KEY, postId, userId, request.getContent()));
         hotPostsCacheService.evict();
     }
 
@@ -54,6 +62,10 @@ public class InteractionServiceImpl implements InteractionService {
         }
         interactionMapper.insertLikeRecord(userId, postId);
         interactionMapper.incrementLikeCount(postId);
+        eventOutboxService.saveEvent(
+                RabbitMqConfig.LIKE_CREATED_ROUTING_KEY,
+                RabbitMqConfig.LIKE_CREATED_ROUTING_KEY,
+                EventMessageFactory.create(RabbitMqConfig.LIKE_CREATED_ROUTING_KEY, postId, userId, null));
         hotPostsCacheService.evict();
 
     }

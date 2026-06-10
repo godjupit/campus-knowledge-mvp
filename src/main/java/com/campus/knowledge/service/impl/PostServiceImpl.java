@@ -3,6 +3,9 @@ package com.campus.knowledge.service.impl;
 import com.campus.common.context.UserContext;
 import com.campus.common.exception.BusinessException;
 import com.campus.common.exception.ErrorCode;
+import com.campus.event.config.RabbitMqConfig;
+import com.campus.event.service.EventOutboxService;
+import com.campus.event.support.EventMessageFactory;
 import com.campus.knowledge.dto.CreatePostRequest;
 import com.campus.knowledge.dto.PostDetailResponse;
 import com.campus.knowledge.dto.PostSummaryResponse;
@@ -13,6 +16,7 @@ import com.campus.knowledge.service.PostService;
 import com.campus.search.service.HotPostsCacheService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +31,7 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final HotPostsCacheService hotPostsCacheService;
     private final PostViewCountService postViewCountService;
+    private final EventOutboxService eventOutboxService;
 
     @Override
     public List<PostSummaryResponse> list(Integer page, Integer size) {
@@ -48,13 +53,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void create(CreatePostRequest request) {
+        Long userId = UserContext.getUserId();
         Post post = new Post();
-        post.setUserId(UserContext.getUserId());
+        post.setUserId(userId);
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
         post.setTags(request.getTags());
         postMapper.insertPost(post);
+        eventOutboxService.saveEvent(
+                RabbitMqConfig.POST_CREATED_ROUTING_KEY,
+                RabbitMqConfig.POST_CREATED_ROUTING_KEY,
+                EventMessageFactory.create(RabbitMqConfig.POST_CREATED_ROUTING_KEY, post.getId(), userId, request.getTitle()));
         hotPostsCacheService.evict();
     }
 }

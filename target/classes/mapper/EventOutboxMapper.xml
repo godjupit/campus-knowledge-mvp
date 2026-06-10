@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.campus.event.mapper.EventOutboxMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into event_outbox (event_type, routing_key, payload, status, retry_count)
+        values (#{eventType}, #{routingKey}, #{payload}, 'PENDING', 0)
+    </insert>
+
+    <select id="selectPending" resultType="com.campus.event.entity.EventOutbox">
+        select id,
+               event_type,
+               routing_key,
+               payload,
+               status,
+               retry_count,
+               created_at,
+               updated_at
+        from event_outbox
+        where status = 'PENDING'
+          and retry_count &lt; #{maxRetry}
+        order by created_at asc, id asc
+        limit #{limit}
+    </select>
+
+    <update id="markSent">
+        update event_outbox
+        set status = 'SENT'
+        where id = #{id}
+          and status = 'PENDING'
+    </update>
+
+    <update id="markFailed">
+        update event_outbox
+        set retry_count = retry_count + 1
+        where id = #{id}
+          and status = 'PENDING'
+    </update>
+</mapper>

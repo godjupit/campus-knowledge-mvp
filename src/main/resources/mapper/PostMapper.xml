@@ -5,7 +5,7 @@
 
 <mapper namespace="com.campus.knowledge.mapper.PostMapper">
 
-    <insert id="insertPost">
+    <insert id="insertPost" useGeneratedKeys="true" keyProperty="id">
         insert into posts (title, content, user_id, tags, status)
         values (#{title}, #{content}, #{userId}, #{tags}, 1)
     </insert>
